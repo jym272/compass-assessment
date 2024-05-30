@@ -258,7 +258,38 @@ func writeScoresToXLSX(filePath string, scores map[string]int) error {
 	return nil
 }
 
+func calculateScore(inputFile, outputFile string) error {
+	contacts, err := readContactsFromXLSX(inputFile)
+	if err != nil {
+		return fmt.Errorf("failed to read contacts from XLSX: %w", err)
+	}
+
+	cm, err := NewContactMap(contacts)
+	if err != nil {
+		return fmt.Errorf("failed to create contact map: %w", err)
+	}
+
+	scores := cm.GetSimilarityScores()
+
+	if err := writeScoresToXLSX(outputFile, scores); err != nil {
+		return fmt.Errorf("failed to write scores to XLSX: %w", err)
+	}
+
+	fmt.Println("Similarity scores written to", outputFile)
+	return nil
+}
+
 func main() {
+	// if I am in container utility env, I take the env vars from the system
+	inputFile := os.Getenv("INPUT_FILE")
+	outputFile := os.Getenv("OUTPUT_FILE")
+	if inputFile != "" && outputFile != "" {
+		err := calculateScore(inputFile, outputFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
 	app := &cli.App{
 		Name:  "Contact Similarity",
 		Usage: "Calculate similarity scores for contacts",
@@ -279,24 +310,11 @@ func main() {
 		Action: func(c *cli.Context) error {
 			inputFile := c.String("file")
 			outputFile := c.String("output")
-
-			contacts, err := readContactsFromXLSX(inputFile)
+			err := calculateScore(inputFile, outputFile)
 			if err != nil {
-				return fmt.Errorf("failed to read contacts from XLSX: %w", err)
+				return err
 			}
 
-			cm, err := NewContactMap(contacts)
-			if err != nil {
-				return fmt.Errorf("failed to create contact map: %w", err)
-			}
-
-			scores := cm.GetSimilarityScores()
-
-			if err := writeScoresToXLSX(outputFile, scores); err != nil {
-				return fmt.Errorf("failed to write scores to XLSX: %w", err)
-			}
-
-			fmt.Println("Similarity scores written to", outputFile)
 			return nil
 		},
 		Commands: []*cli.Command{

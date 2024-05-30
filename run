@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# Function to display script usage
+show_help() {
+    echo -e "\e[1;33mUsage:\e[0m $0 -i <input_file.xlsx> [-o <out_file.xlsx>]"
+    echo -e "  \e[1;32m-i, \e[0m          Input File (\e[1;31mmandatory\e[0m)"
+    echo -e "  \e[1;32m-o, \e[0m          Output File (\e[1;33moptional\e[0m, default: out_file.xlsx)"
+    exit 1
+}
+
+# Function to print colored and formatted messages
+print_message() {
+    local message="$1"
+    local color="$2"
+    echo -e "${color}${message}\e[0m"
+}
+
+# Initialize default values
+out_file="out_file.xlsx"
+
+# Parse command line options
+while getopts ":i:o:" opt; do
+    case $opt in
+        i)
+            input_file="$OPTARG"
+            ;;
+        o)
+            out_file="$OPTARG"
+            ;;
+        \?)
+            echo -e "\e[1;31m✘ Invalid option: -$OPTARG\e[0m"
+            show_help
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument."
+            show_help
+            ;;
+    esac
+done
+
+# Check if mandatory parameter 'tag' is provided
+if [ -z "$input_file" ]; then
+    print_message "Error: Input File (-i) is mandatory" "\e[1;31m"
+    show_help
+fi
+
+
+
+#source "$(dirname "$0")"/exports.sh
+#cd "$PARENT_DIRECTORY"
+
+INPUT_FILE="${input_file}"
+OUTPUT_FILE="${out_file}"
+UID_GID="$(id -u):$(id -g)"
+
+export UID_GID
+export INPUT_FILE
+export OUTPUT_FILE
+
+docker compose run -it --rm score

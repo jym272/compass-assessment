@@ -1,0 +1,11 @@
+services:
+  score:
+    user: ${UID_GID}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ${PWD}:/app
+    environment:
+      - INPUT_FILE=${INPUT_FILE}
+      - OUTPUT_FILE=${OUTPUT_FILE}
