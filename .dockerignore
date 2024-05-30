@@ -1,0 +1,10 @@
+.github
+.vscode
+scripts
+Dockerfile
+kustomization.yaml
+docker-compose.yaml
+.idea
+*.env
+.env
+.env.local
