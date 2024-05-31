@@ -15,11 +15,11 @@ potentially duplicates. You need to write a function that will do the following:
 Example:
 #### Input
 
-| Contact | ID    | First Name                            | Last Name                      | Email Address        | Zip Code             | Address |
-|---------|-------|---------------------------------------|--------------------------------|----------------------|----------------------|---------|
-| 1001    | C     | F                                     | mollis.lectus.pede@outlook.net |                      | 449-6990 Tellus. Rd. |         |
-| 1002    | C     | French mollis.lectus.pede@outlook.net | 39746                          | 449-6990 Tellus. Rd. |                      |         |
-| 1003    | Ciara | F                                     | non.lacinia.at@zoho.ca         | 39746                |                      |         |
+| Contact ID | First Name | Last Name | Email Address                  | Zip Code | Address              |
+|------------|------------|-----------|--------------------------------|----------|----------------------|
+| 1001       | C          | F         | mollis.lectus.pede@outlook.net |          | 449-6990 Tellus. Rd. |         |
+| 1002       | C          | French    | mollis.lectus.pede@outlook.net | 39746    | 449-6990 Tellus. Rd. |                      |         |
+| 1003       | Ciara      | F         | non.lacinia.at@zoho.ca         | 39746    |                      |         |
 
 #### Output
 
